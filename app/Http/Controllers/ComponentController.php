@@ -37,7 +37,7 @@ class ComponentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return $request->all();
     }
 
     /**
@@ -82,6 +82,6 @@ class ComponentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return "hello";
     }
 }
