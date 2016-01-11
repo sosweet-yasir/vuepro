@@ -103,6 +103,12 @@
                         </li>
                     </ul>
                 </div>
+
+                {{--custom tag/component creating--}}
+                <div id="custom">
+
+                </div>
+
             </div>
         </div>
 </div>
@@ -112,13 +118,46 @@
     <a @click='count++' class="btn btn-primary btn-block">@{{ count }} </a>
 </template>
 
-{{--template for plan--}}
-<template id="plan-template">
 
+{{--template for plan--}}
+{{--<template id="plan-template">--}}
+
+{{--</template>--}}
+
+<template id="custom-template">
+    <ul>
+        <li
+        @click="task.completed = !task.completed"
+        v-for="task in tasks"
+        :class="{'completed': !task.completed}"
+        >
+        @{{ task.body }}
+        </li>
+    </ul>
 </template>
+
+
 
 <script src="{!! asset('js/app.js') !!}"></script>
 <script>
+    Vue.components('tasks',{
+        tamplate:'custom-template',
+        props:[list]
+
+    });
+
+    new Vue({
+        el: '#custom',
+        data:{
+            tasks:[
+                {body: 'Go to the Store', completed: false},
+                {body: 'Go to the bank', completed: false},
+                {body: 'Go to the Store', completed: false}
+            ]
+        },
+
+    })
+
     new Vue({
         el:'#style',
         data:{
