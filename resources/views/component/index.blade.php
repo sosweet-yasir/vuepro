@@ -2,8 +2,9 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <link rel="stylesheet" type="text/css" href="{!! asset('assets/css/app.css') !!}">
-    {{--<style href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"></style>--}}
-    {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">--}}
+    <style>
+        .working{text-decoration: line-through;}
+    </style>
 </head>
 <body>
 
@@ -46,35 +47,61 @@
                         </div>
                     </div>
 
-                <form @submit.prevent ="handleIt" method="post" action="{!! route('component.store') !!}">
-                    <input value="{!! csrf_token() !!}" name="_token" hidden>
-                    <div class="row">
-                        <div class="form-group col-md-9 col-md-offset-1" >
-                            <label for="subject">Enter Subject</label>
-                            <input v-model="subject" name="subject" class="form-control" >
+                    <form @submit.prevent ="handleIt" method="post" action="{!! route('component.store') !!}">
+                        <input value="{!! csrf_token() !!}" name="_token" hidden>
+                        <div class="row">
+                            <div class="form-group col-md-9 col-md-offset-1" >
+                                <label for="subject">Enter Subject</label>
+                                <input v-model="subject" name="subject" class="form-control" >
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="form-group col-md-9 col-md-offset-1" >
-                            <label for="message">Enter Message</label>
-                            <textarea v-model="message" name="message" rows="5" class="form-control"></textarea>
+                        <div class="row">
+                            <div class="form-group col-md-9 col-md-offset-1" >
+                                <label for="message">Enter Message</label>
+                                <textarea v-model="message" name="message" rows="5" class="form-control"></textarea>
+                            </div>
                         </div>
-                    </div>
 
 
-                    <div class="form-group">
-                        <div class=" col-lg-offset-10">
-                            <button class="btn btn-primary btn-block" type="submit">Send message</button>
-                            <a @click="increment" class="btn btn-primary btn-block">
-                                increment value @{{ count }}
+                        <div class="form-group">
+                            <div class=" col-lg-offset-10">
+                                <button class="btn btn-primary btn-block" type="submit">Send message</button>
+                                <a @click="increment" class="btn btn-primary btn-block">
+                                    increment value @{{ count }}
+                                </a>
+                                <counter subject="Likes"></counter>
+                                <counter subject="Dislikes"></counter>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {{--end app div--}}
+
+                {{--plans div for Vue js--}}
+                <div id="plans">
+                    <div v-for="plan in plans">
+                        <plan :active.sync="active" :plan="plan" inline-template>
+                            <span class="col-md-offset-1">@{{ plan.name }}</span>
+                            <span class="col-md-offset-1">@{{ plan.price }}/month</span>
+                            <a @click="setActivePlan" v-show="plan.name != active.name" class="btn btn-default col-md-offset-1">
+                                @{{ isUpgrade? 'Upgrade' : 'Downgrade' }}
                             </a>
-                            <counter subject="Likes"></counter>
-                            <counter subject="Dislikes"></counter>
-                        </div>
+                            <span v-else class="col-md-offset-1">
+                                Selected
+                            </span>
+                        </plan>
                     </div>
-
-                </form>
+                </div>
+                {{--end plans div--}}
+                </br>
+                {{--vary some inline style on some condation--}}
+                <div id="style">
+                    <ul>
+                        <li @click="name.working = !name.working" v-for="name in names" :class="{'working': !name.working}" >
+                            @{{ name.body }}
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -85,10 +112,64 @@
     <a @click='count++' class="btn btn-primary btn-block">@{{ count }} </a>
 </template>
 
+{{--template for plan--}}
+<template id="plan-template">
+
+</template>
+
 <script src="{!! asset('js/app.js') !!}"></script>
 <script>
+    new Vue({
+        el:'#style',
+        data:{
+            names:[
+                {body: 'yasir', working: true},
+                {body: 'shahzaib', working: false},
+                {body: 'aqeel', working: false},
+                {body: 'fahid', working: true}
+            ],
+            working:'work'
+        }
+    })
+
+    new Vue({
+        el: '#plans',
+
+        data:{
+            plans:[
+                {name: 'Enterprise', price: 100},
+                {name: 'Pro', price: 50},
+                {name: 'Personal', price: 10},
+                {name: 'Free', price: 0}
+            ],
+            active:{}
+        },
+
+        components: {
+            plan: {
+//                template: '#plan-template', //template is inline now
+
+                props: ['plan', 'active'],
+
+                methods: {
+                    setActivePlan: function () {
+                        this.active = this.plan;
+                    }
+                },
+
+                computed:{
+                    isUpgrade:function(){
+                        return this.plan.price > this.active.price
+
+                    }
+                }
+
+            }
+        }
+    })
 
 
+    {{--globla component--}}
     Vue.component('counter', {
         template: '#counter-template',
         props:['subject'],
@@ -96,7 +177,7 @@
             return {count : 0}
         }
     });
-//global component tag creating
+
     var data={
         subject:'new message',
         message:'this is your message',
@@ -141,6 +222,9 @@
             }
         }
     })
+
+
+
 </script>
 </body>
 </html>
