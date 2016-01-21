@@ -106,9 +106,9 @@
 
                 {{--custom tag/component creating--}}
                 <div id="custom">
-                   <tasks :list="tasks"></tasks>
-                   <tasks :list="tasks"></tasks>
-                   <tasks :list="[{body: 'do this', completed: 'false'}]"></tasks>
+                    <tasks :list="tasks"></tasks>
+                    <tasks :list="tasks"></tasks>
+                    <tasks :list="[{body: 'do this', completed: 'false'}]"></tasks>
                 </div>
 
             </div>
@@ -127,13 +127,17 @@
 {{--</template>--}}
 
 <template id="custom_template">
+    <h1>MY Tasks
+        <span v-show="remaining">(@{{ remaining }})</span>
+    </h1>
     <ul>
         <li
                 :class="{'working': !task.completed}"
                 v-for="task in list"
                 @click="task.completed = !task.completed"
         >
-        @{{ task.body }}
+            @{{ task.body }}
+            <strong @click="deleteTask(task)">X</strong>
         </li>
     </ul>
 </template>
@@ -144,7 +148,19 @@
 <script>
     Vue.component('tasks',{
         props:['list'],
-        template: '#custom_template'
+        template: '#custom_template',
+        computed: {
+            remaining:function (){
+                 return this.list.filter(function(task){
+                    return ! task.completed;
+                 }).length;
+            }
+        },
+        methods:{
+            deleteTask: function(task){
+                this.list.$remove(task);
+            }
+        }
 
     });
 
