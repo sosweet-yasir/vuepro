@@ -106,7 +106,9 @@
 
                 {{--custom tag/component creating--}}
                 <div id="custom">
-
+                   <tasks :list="tasks"></tasks>
+                   <tasks :list="tasks"></tasks>
+                   <tasks :list="[{body: 'do this', completed: 'false'}]"></tasks>
                 </div>
 
             </div>
@@ -124,12 +126,12 @@
 
 {{--</template>--}}
 
-<template id="custom-template">
+<template id="custom_template">
     <ul>
         <li
-        @click="task.completed = !task.completed"
-        v-for="task in tasks"
-        :class="{'completed': !task.completed}"
+                :class="{'working': !task.completed}"
+                v-for="task in list"
+                @click="task.completed = !task.completed"
         >
         @{{ task.body }}
         </li>
@@ -140,9 +142,9 @@
 
 <script src="{!! asset('js/app.js') !!}"></script>
 <script>
-    Vue.components('tasks',{
-        tamplate:'custom-template',
-        props:[list]
+    Vue.component('tasks',{
+        props:['list'],
+        template: '#custom_template'
 
     });
 
@@ -152,11 +154,11 @@
             tasks:[
                 {body: 'Go to the Store', completed: false},
                 {body: 'Go to the bank', completed: false},
-                {body: 'Go to the Store', completed: false}
+                {body: 'Go to the Doctor', completed: true}
             ]
         },
 
-    })
+    });
 
     new Vue({
         el:'#style',
