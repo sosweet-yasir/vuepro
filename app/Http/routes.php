@@ -25,7 +25,9 @@ Route::get('/', function () {
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-
+Route::get('api/tasks', function(){
+   return App\Component::latest()->get();
+});
 Route::group(['middleware' => ['web']], function () {
     Route::resource('component', 'ComponentController');
 

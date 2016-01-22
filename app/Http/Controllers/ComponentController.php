@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Component;
 
 class ComponentController extends Controller
 {
@@ -16,7 +17,8 @@ class ComponentController extends Controller
      */
     public function index()
     {
-        return view('component.index');
+        $tasks= Component::latest()->get();
+        return view('component.index', compact('tasks'));
     }
 
     /**
@@ -48,7 +50,7 @@ class ComponentController extends Controller
      */
     public function show($id)
     {
-        //
+        return Component::find($id);
     }
 
     /**
@@ -59,7 +61,7 @@ class ComponentController extends Controller
      */
     public function edit($id)
     {
-        //
+        return "success";
     }
 
     /**
@@ -69,9 +71,9 @@ class ComponentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
-        //
+        return "success";
     }
 
     /**
@@ -82,6 +84,6 @@ class ComponentController extends Controller
      */
     public function destroy($id)
     {
-        return "hello";
+
     }
 }

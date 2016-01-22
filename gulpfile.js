@@ -20,7 +20,9 @@ elixir(function(mix) {
     mix.scripts([
         'vue.js',
         'jquery.js',
-        'bootstrap.min.js'
+        'bootstrap.min.js',
+        'vue-resource.js',
+        'app.js'
 
     ], 'public/js/app.js')
 
